@@ -4,6 +4,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -104,6 +105,8 @@ public class Controller implements Initializable {
 	ResultSet resultSet = null;
 	PreparedStatement preparedStatement = null;
 	ObservableList<Todo> todayList = null;
+	
+	private String userId = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -111,26 +114,18 @@ public class Controller implements Initializable {
 	
 	@FXML
 	public void login(ActionEvent event) {
-		connection = DbConnection.connectDb();
-		String sql = "SELECT * FROM USER WHERE ID=? AND PASSWORD=?";
-		try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, loginId.getText());
-			preparedStatement.setString(2, loginPw.getText());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
-				JOptionPane.showMessageDialog(null, "ID and PW is Correct");
+		boolean isLoginSuccess = DbConnection.getUser(loginId.getText(), loginPw.getText());
+		if(isLoginSuccess) {
+			userId = loginId.getText();
+			JOptionPane.showMessageDialog(null, "Login Success");
+			try {
 				goToTodo(event);
-				System.out.println(todayPane);
-				//getTodayTodoList();
-			} else {
-				JOptionPane.showMessageDialog(null, "Invalide ID or PW");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
+		} else {
+			JOptionPane.showMessageDialog(null, "Login Fail");
 		}
-		System.out.println(todayPane);
 	}
 
 	@FXML
@@ -162,7 +157,8 @@ public class Controller implements Initializable {
 		todayTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
 		todayState.setCellValueFactory(new PropertyValueFactory<Todo, Character>("state"));
 		
-		todayList = DbConnection.getTodoayList();
+		
+		todayList = DbConnection.getTodayList(userId);
 		todayTable.setItems(todayList);
 	}
 

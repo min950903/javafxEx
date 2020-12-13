@@ -28,6 +28,11 @@ public class Todo implements Serializable{
 		this.date = date;
 		this.state = state;
 	}
+	
+	public Todo(String title, char state) {
+		this.title = title;
+		this.state = state;
+	}
 
 	public int getNo() {
 		return no;
