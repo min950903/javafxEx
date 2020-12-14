@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="851.0" prefWidth="1271.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="851.0" prefWidth="1271.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TodoListController">
    <children>
       <HBox prefHeight="851.0" prefWidth="1271.0">
          <children>
@@ -73,7 +73,7 @@
                      <padding>
                         <Insets left="20.0" top="20.0" />
                      </padding></VBox>
-                  <Button layoutX="14.0" layoutY="748.0" mnemonicParsing="false" style="-fx-background-color: #47bbc1;" text="+" textFill="WHITE">
+                  <Button layoutX="14.0" layoutY="748.0" mnemonicParsing="false" onAction="#showTodoItem" style="-fx-background-color: #47bbc1;" text="+" textFill="WHITE">
                      <font>
                         <Font size="48.0" />
                      </font>
@@ -82,7 +82,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="921.0">
                <children>
-                  <BorderPane prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;" visible="false">
+                  <BorderPane fx:id="todayPane" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;">
                      <top>
                         <Label prefWidth="921.0" text="Today Task" BorderPane.alignment="CENTER">
                            <font>
@@ -94,15 +94,15 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="todayTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
-                            <TableColumn prefWidth="739.0" text="Title" />
-                            <TableColumn minWidth="0.0" prefWidth="160.0" text="State" />
+                            <TableColumn fx:id="todayTitle" prefWidth="739.0" text="Title" />
+                            <TableColumn fx:id="todayState" minWidth="0.0" prefWidth="160.0" text="State" />
                           </columns>
                         </TableView>
                      </center>
                   </BorderPane>
-                  <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;" visible="false">
+                  <BorderPane fx:id="upcomingPane" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;" visible="false">
                      <top>
                         <Label prefWidth="921.0" text="Upcoming Task" BorderPane.alignment="CENTER">
                            <font>
@@ -114,15 +114,16 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <columns>
-                              <TableColumn prefWidth="739.0" text="Title" />
-                              <TableColumn minWidth="0.0" prefWidth="160.0" text="State" />
-                           </columns>
+                        <TableView fx:id="upcomingTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="upcomingTitle" prefWidth="600.0" text="Title" />
+                            <TableColumn fx:id="upcomingState" minWidth="0.0" prefWidth="130.0" text="State" />
+                              <TableColumn fx:id="upcomingDate" prefWidth="170.0" text="Date" />
+                          </columns>
                         </TableView>
                      </center>
                   </BorderPane>
-                  <BorderPane layoutY="10.0" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;">
+                  <BorderPane fx:id="allTodoPane" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;" visible="false">
                      <top>
                         <Label prefWidth="921.0" text="All Todo Task" BorderPane.alignment="CENTER">
                            <font>
@@ -134,11 +135,11 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="allTodoTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
-                            <TableColumn prefWidth="563.0" text="Title" />
-                              <TableColumn prefWidth="214.0" text="Date" />
-                            <TableColumn prefWidth="122.0" text="State" />
+                            <TableColumn fx:id="allTodoTitle" prefWidth="600.0" text="Title" />
+                              <TableColumn fx:id="allTodoState" prefWidth="130.0" text="Date" />
+                            <TableColumn fx:id="allTodoDate" prefWidth="170.0" text="State" />
                           </columns>
                         </TableView>
                      </center>

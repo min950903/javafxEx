@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,8 @@ public class DbConnection {
 	private static String DATABASE_URL;
 	private static String DATABASE_USERNAME;
 	private static String DATABASE_PASSWORD;
-
+	private static Connection connection = connectDb();
+	
 	private static void getProperties() throws Exception {
 		File propertyPath = new File("src/application/dbInfo.properties");
 		FileReader file = new FileReader(propertyPath);
@@ -32,7 +34,6 @@ public class DbConnection {
 	}
 
 	public static Connection connectDb() {
-		Connection connection = null;
 		try {
 			getProperties();
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -47,7 +48,6 @@ public class DbConnection {
 	}
 
 	public static boolean getUser(String id, String pw) {
-		Connection connection = connectDb();
 		String sql = "SELECT * FROM USER WHERE ID=? AND PASSWORD=?";
 
 		boolean isSuccess = false;
@@ -57,12 +57,11 @@ public class DbConnection {
 			preparedStatement.setString(2, pw);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
-			if (resultSet.next()) {
-				return !isSuccess;
-			}
+			if (resultSet.next()) {return !isSuccess;}
 
 			return isSuccess;
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 
 			return isSuccess;
@@ -70,12 +69,12 @@ public class DbConnection {
 	}
 
 	public static ObservableList<Todo> getTodayList(String id) {
-		Connection connection = connectDb();
 		ObservableList<Todo> list = FXCollections.observableArrayList();
+		
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT TITLE, DATE_FORMAT(DATE, '%Y-%m-%d') AS DATE");
-		sql.append("FROM TODO");
-		sql.append("WHERE DATE(DATE) = CURDATE() AND ID=?");
+		sql.append("SELECT TITLE, CASE STATE WHEN 'R' THEN '미완료' WHEN 'I' THEN '실행중' WHEN 'F' THEN '완료' END AS STATE ");
+		sql.append("FROM TODO ");
+		sql.append("WHERE DATE(DATE) = CURDATE() AND USER_ID=?");
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
@@ -83,14 +82,96 @@ public class DbConnection {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				list.add(new Todo(resultSet.getString(0), resultSet.getString(1).charAt(0)));
+				list.add(new Todo(resultSet.getString(1), resultSet.getString(2)));
 			}
 
 			return list;
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 
 			return null;
+		}
+	}
+	
+	public static ObservableList<Todo> getUpcomingList(String id) {
+		ObservableList<Todo> list = FXCollections.observableArrayList();
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT TITLE, CASE STATE WHEN 'R' THEN '미완료' WHEN 'I' THEN '실행중' WHEN 'F' THEN '완료' END AS STATE, DATE ");
+		sql.append("FROM TODO ");
+		sql.append("WHERE DATE(DATE) > CURDATE() AND USER_ID=?");
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				list.add(new Todo(resultSet.getString(1), resultSet.getString(2), resultSet.getDate(3)));
+			}
+
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
+
+			return null;
+		}
+	}
+	
+	public static ObservableList<Todo> getAllTodoList(String id) {
+		ObservableList<Todo> list = FXCollections.observableArrayList();
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT TITLE, CASE STATE WHEN 'R' THEN '미완료' WHEN 'I' THEN '실행중' WHEN 'F' THEN '완료' END AS STATE, DATE ");
+		sql.append("FROM TODO ");
+		sql.append("WHERE USER_ID=?");
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+			preparedStatement.setString(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				list.add(new Todo(resultSet.getString(1), resultSet.getString(2), resultSet.getDate(3)));
+			}
+
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
+
+			return null;
+		}
+	}
+	
+	public static boolean addTodo(Todo todo ) {
+		boolean isSuccess = false;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO TODO (TITLE, DESCRIPTION, DATE, STATE, USER_ID) ");
+		sql.append("VALUES (?, ?, ?, ?, ?)");
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+			preparedStatement.setString(1, todo.getTitle());
+			preparedStatement.setString(2, todo.getDesc());
+			preparedStatement.setDate(3, todo.getDate());
+			preparedStatement.setString(4, todo.getState());
+			preparedStatement.setString(5, todo.getUserId());
+			
+			int result = preparedStatement.executeUpdate();
+			if(result > 0) {
+				return !isSuccess;
+			}
+			
+			return isSuccess;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
+			
+			return isSuccess;
 		}
 	}
 }

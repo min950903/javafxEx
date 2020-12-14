@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import application.dto.Todo;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,87 +27,40 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Controller implements Initializable {
 	@FXML
-	private PasswordField signUpPw;
-
-	@FXML
-	private BorderPane loginPane;
-
-	@FXML
-	private BorderPane signUpPane;
-
-	@FXML
-	private BorderPane allTodoPane;
-
-	@FXML
-	private BorderPane todayPane;
-
-	@FXML
-	private BorderPane upcomingPane;
+	private BorderPane loginPane, signUpPane;
 
 	@FXML
 	private TextField loginId;
 
 	@FXML
-	private Button btnToSignUp;
-
+	private PasswordField loginPw ;
+	
 	@FXML
 	private Button btnLogin;
 
 	@FXML
-	private TextField signUpName;
+	private TextField signUpName, signUpId;
+	
+	@FXML
+	private PasswordField signUpPw;
 
 	@FXML
 	private Button btnSignUp;
 
 	@FXML
-	private PasswordField loginPw;
+	private Button btnToLogin, btnToSignUp;
 
-	@FXML
-	private Button btnToLogin;
-
-	@FXML
-	private TextField signUpId;
-
-	@FXML
-	private TableView<Todo> todayTable;
-
-	@FXML
-	private TableColumn<Todo, String> todayTitle;
-
-	@FXML
-	private TableColumn<Todo, Character> todayState;
-
-	@FXML
-	private TableView<Todo> allTodoTable;
-
-	@FXML
-	private TableColumn<Todo, String> allTodoTitle;
-
-	@FXML
-	private TableColumn<Todo, Character> allTodoState;
-
-	@FXML
-	private TableColumn<Todo, Date> allTodoDate;
-
-	@FXML
-	private TableView<Todo> upcomingTable;
-
-	@FXML
-	private TableColumn<Todo, String> upcomingTitle;
-
-	@FXML
-	private TableColumn<Todo, Date> upcomingDate;
-
-	Connection connection = null;
-	ResultSet resultSet = null;
-	PreparedStatement preparedStatement = null;
-	ObservableList<Todo> todayList = null;
+	private static String userId = null;
 	
-	private String userId = null;
+	public String getUserId() {
+		return this.userId;
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -130,36 +84,20 @@ public class Controller implements Initializable {
 
 	@FXML
 	public void signUp(ActionEvent event) {
-		connection = DbConnection.connectDb();
-		String sql = "INSERT INTO USER VALUES(?, ?, ?)";
-		try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, signUpId.getText());
-			preparedStatement.setString(2, signUpPw.getText());
-			preparedStatement.setString(3, signUpName.getText());
-
-			int result = preparedStatement.executeUpdate();
-			if (result > 0) {
-				JOptionPane.showMessageDialog(null, "Success Sign Up");
-
-				signUpPane.setVisible(false);
-				loginPane.setVisible(true);
-			} else {
-				JOptionPane.showMessageDialog(null, "Fail Sign Up");
-			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
-		}
-	}
-
-	@FXML
-	public void getTodayTodoList() {
-		todayTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
-		todayState.setCellValueFactory(new PropertyValueFactory<Todo, Character>("state"));
-		
-		
-		todayList = DbConnection.getTodayList(userId);
-		todayTable.setItems(todayList);
+		/*
+		 * connection = DbConnection.connectDb(); String sql =
+		 * "INSERT INTO USER VALUES(?, ?, ?)"; try { preparedStatement =
+		 * connection.prepareStatement(sql); preparedStatement.setString(1,
+		 * signUpId.getText()); preparedStatement.setString(2, signUpPw.getText());
+		 * preparedStatement.setString(3, signUpName.getText());
+		 * 
+		 * int result = preparedStatement.executeUpdate(); if (result > 0) {
+		 * JOptionPane.showMessageDialog(null, "Success Sign Up");
+		 * 
+		 * signUpPane.setVisible(false); loginPane.setVisible(true); } else {
+		 * JOptionPane.showMessageDialog(null, "Fail Sign Up"); } } catch (Exception e)
+		 * { JOptionPane.showMessageDialog(null, e); }
+		 */
 	}
 
 	@FXML
@@ -175,41 +113,9 @@ public class Controller implements Initializable {
 	}
 
 	@FXML
-	void showTodayPane(ActionEvent event) {
-		todayPane.setVisible(true);
-		upcomingPane.setVisible(false);
-		allTodoPane.setVisible(false);
-		
-		getTodayTodoList();
-	}
-
-	@FXML
-	void showUpcomingPane(ActionEvent event) {
-		todayPane.setVisible(false);
-		upcomingPane.setVisible(true);
-		allTodoPane.setVisible(false);
-	}
-
-	@FXML
-	void showAllTodoPane(ActionEvent event) {
-		todayPane.setVisible(false);
-		upcomingPane.setVisible(false);
-		allTodoPane.setVisible(true);
-	}
-
-	@FXML
 	void goToTodo(ActionEvent event) throws Exception {
-		Parent todoList = FXMLLoader.load(getClass().getResource("todo_list.fxml"));
+		Parent todoList = FXMLLoader.load(getClass().getResource("layout/todo_list.fxml"));
 		StackPane root = (StackPane) btnLogin.getScene().getRoot();
 		root.getChildren().add(todoList);
-	}
-
-	@FXML
-	void openTodoItemScene(ActionEvent event) throws Exception {
-		Parent item = FXMLLoader.load(getClass().getResource("todo_item.fxml"));
-
-		Stage stage = new Stage();
-		stage.setScene(new Scene(item));
-		stage.show();
 	}
 }

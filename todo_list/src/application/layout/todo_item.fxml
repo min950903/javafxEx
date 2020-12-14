@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f5f9fc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f5f9fc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TodoItemController">
    <top>
       <Label text="Todo Item" BorderPane.alignment="CENTER">
          <font>
@@ -31,7 +31,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextField prefHeight="34.0" prefWidth="540.0" />
+            <TextField fx:id="itemTitle" prefHeight="34.0" prefWidth="540.0" />
             <Label text="Desc:">
                <font>
                   <Font size="24.0" />
@@ -40,7 +40,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextArea prefHeight="114.0" prefWidth="540.0" />
+            <TextArea fx:id="itemDesc" prefHeight="114.0" prefWidth="540.0" />
             <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="540.0">
                <children>
                   <Label text="Date: ">
@@ -48,7 +48,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker prefHeight="22.0" prefWidth="162.0">
+                  <DatePicker fx:id="itemDate" prefHeight="22.0" prefWidth="162.0">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
@@ -61,7 +61,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox prefHeight="22.0" prefWidth="136.0" />
+                  <ComboBox fx:id="itemState" prefHeight="22.0" prefWidth="136.0" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />
@@ -69,12 +69,12 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="540.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #47bbc1;" text="Add" textFill="WHITE">
+                  <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #47bbc1;" text="Add" textFill="WHITE">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #47bbc1;" text="Cancle" textFill="WHITE">
+                  <Button fx:id="cancleBtn" mnemonicParsing="false" onAction="#closeDialog" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: #47bbc1;" text="Cancle" textFill="WHITE">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
