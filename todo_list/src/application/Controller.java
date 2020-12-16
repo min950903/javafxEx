@@ -1,35 +1,21 @@
 package application;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import application.dto.Todo;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import application.dto.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Controller implements Initializable {
 	@FXML
@@ -39,14 +25,14 @@ public class Controller implements Initializable {
 	private TextField loginId;
 
 	@FXML
-	private PasswordField loginPw ;
-	
+	private PasswordField loginPw;
+
 	@FXML
 	private Button btnLogin;
 
 	@FXML
 	private TextField signUpName, signUpId;
-	
+
 	@FXML
 	private PasswordField signUpPw;
 
@@ -57,20 +43,32 @@ public class Controller implements Initializable {
 	private Button btnToLogin, btnToSignUp;
 
 	private static String userId = null;
+	private static String userName = null;
+	private static StackPane rootStackPane = null;
+	private Service service = new Service();
 	
+	public StackPane getStackPane() {
+		return Controller.rootStackPane;
+	}
+
 	public String getUserId() {
-		return this.userId;
+		return Controller.userId;
+	}
+	
+	public String getUserName() {
+		return Controller.userName;
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	}
-	
+
 	@FXML
 	public void login(ActionEvent event) {
-		boolean isLoginSuccess = DbConnection.getUser(loginId.getText(), loginPw.getText());
-		if(isLoginSuccess) {
-			userId = loginId.getText();
+		User user = service.getUser(new User(loginId.getText(), loginPw.getText()));
+		if (null != user) {
+			userId = user.getId();
+			userName = user.getName();
 			JOptionPane.showMessageDialog(null, "Login Success");
 			try {
 				goToTodo(event);
@@ -84,20 +82,14 @@ public class Controller implements Initializable {
 
 	@FXML
 	public void signUp(ActionEvent event) {
-		/*
-		 * connection = DbConnection.connectDb(); String sql =
-		 * "INSERT INTO USER VALUES(?, ?, ?)"; try { preparedStatement =
-		 * connection.prepareStatement(sql); preparedStatement.setString(1,
-		 * signUpId.getText()); preparedStatement.setString(2, signUpPw.getText());
-		 * preparedStatement.setString(3, signUpName.getText());
-		 * 
-		 * int result = preparedStatement.executeUpdate(); if (result > 0) {
-		 * JOptionPane.showMessageDialog(null, "Success Sign Up");
-		 * 
-		 * signUpPane.setVisible(false); loginPane.setVisible(true); } else {
-		 * JOptionPane.showMessageDialog(null, "Fail Sign Up"); } } catch (Exception e)
-		 * { JOptionPane.showMessageDialog(null, e); }
-		 */
+		boolean isSignUpSuccess = DbConnection
+				.addUser(new User(signUpId.getText(), signUpPw.getText(), signUpName.getText()));
+		if (isSignUpSuccess) {
+			JOptionPane.showMessageDialog(null, "SignUp Success");
+			showLoginPane(event);
+		} else {
+			JOptionPane.showMessageDialog(null, "SignUp Fail");
+		}
 	}
 
 	@FXML
@@ -115,7 +107,10 @@ public class Controller implements Initializable {
 	@FXML
 	void goToTodo(ActionEvent event) throws Exception {
 		Parent todoList = FXMLLoader.load(getClass().getResource("layout/todo_list.fxml"));
-		StackPane root = (StackPane) btnLogin.getScene().getRoot();
-		root.getChildren().add(todoList);
+		rootStackPane = (StackPane) btnLogin.getScene().getRoot();
+		rootStackPane.getChildren().add(todoList);
+		
+		loginId.clear();
+		loginPw.clear();
 	}
 }

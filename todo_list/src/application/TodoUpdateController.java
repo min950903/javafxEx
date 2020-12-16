@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class TodoItemController implements Initializable {
+public class TodoUpdateController implements Initializable {
 	@FXML
 	private BorderPane itemPane;
 
@@ -38,31 +38,50 @@ public class TodoItemController implements Initializable {
 	private ComboBox<String> itemState;
 
 	@FXML
-	private Button addBtn;
+	private Button updateBtn;
 
 	@FXML
 	private Button cancleBtn;
 
 	private ObservableList<String> comboBoxList = FXCollections.observableArrayList("미완료", "진행중", "완료");
-	private Controller controller = new Controller();
+	private TodoListController controller = new TodoListController();
+	private Todo todo = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		todo = controller.getUpdateTodo();
+		itemTitle.setText(todo.getTitle());
+		itemDesc.setText(todo.getDesc());
+		itemDate.setValue(todo.getDate().toLocalDate());
 		itemState.setItems(comboBoxList);
-		itemState.getSelectionModel().selectFirst();
+		itemState.getSelectionModel().select(todo.getState());
 	}
 
 	@FXML
-	void addItem(ActionEvent event) {
-
-		Todo todo = new Todo(itemTitle.getText(), itemDesc.getText(), Date.valueOf(itemDate.getValue()),
-				convertState(itemState.getValue()), controller.getUserId());
-
-		boolean isSuccess = DbConnection.addTodo(todo);
+	void updateItem(ActionEvent event) {
+		todo = new Todo(todo.getNo(), itemTitle.getText(), itemDesc.getText()
+				,convertState(itemState.getValue()), Date.valueOf(itemDate.getValue()));
+		
+		boolean isSuccess = DbConnection.updateTodo(todo);
 		if (isSuccess) {
-			JOptionPane.showMessageDialog(null, "Insert Success");
+			JOptionPane.showMessageDialog(null, "Update Success");
 		} else {
-			JOptionPane.showMessageDialog(null, "Insert Fail");
+			JOptionPane.showMessageDialog(null, "Update Fail");
+		}
+
+		closeDialog(event);
+	}
+
+	@FXML
+	void deleteItem(ActionEvent event) {
+		todo = new Todo(todo.getNo());
+
+		boolean isSuccess = DbConnection.deleteTodo(todo);
+		if (isSuccess) {
+			JOptionPane.showMessageDialog(null, "Delete Success");
+		} else {
+			JOptionPane.showMessageDialog(null, "Delete Fail");
 		}
 
 		closeDialog(event);
@@ -70,9 +89,11 @@ public class TodoItemController implements Initializable {
 
 	@FXML
 	void closeDialog(ActionEvent event) {
+
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
 		stage.close();
+
 	}
 
 	public String convertState(String state) {

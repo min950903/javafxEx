@@ -3,7 +3,7 @@ package application.dto;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class Todo implements Serializable{
+public class Todo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int no;
@@ -13,22 +13,6 @@ public class Todo implements Serializable{
 	private String state;
 	private String userId;
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public Todo(int no, String title, String desc, Date date, String state) {
-		this.no = no;
-		this.title = title;
-		this.desc = desc;
-		this.date = date;
-		this.state = state;
-	}
-	
 	public Todo(String title, String desc, Date date, String state, String userId) {
 		this.title = title;
 		this.desc = desc;
@@ -36,16 +20,17 @@ public class Todo implements Serializable{
 		this.state = state;
 		this.userId = userId;
 	}
-	
-	public Todo(String title, String state) {
+
+	public Todo(int no, String title, String desc, String state, Date date) {
+		this.no = no;
 		this.title = title;
-		this.state = state;
-	}
-	
-	public Todo(String title, String state, Date date) {
-		this.title = title;
+		this.desc = desc;
 		this.state = state;
 		this.date = date;
+	}
+
+	public Todo(int no) {
+		this.no = no;
 	}
 
 	public int getNo() {
@@ -88,9 +73,17 @@ public class Todo implements Serializable{
 		this.state = state;
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	@Override
 	public String toString() {
-		return this.title + " / " + this.desc + " / " + this.state; 
+		return this.title + " / " + this.desc + " / " + this.state;
 	}
-	
+
 }
