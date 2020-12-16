@@ -45,6 +45,7 @@ public class TodoItemController implements Initializable {
 
 	private ObservableList<String> comboBoxList = FXCollections.observableArrayList("미완료", "진행중", "완료");
 	private Controller controller = new Controller();
+	private TodoItemService todoItemService = new TodoItemService();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -54,15 +55,14 @@ public class TodoItemController implements Initializable {
 
 	@FXML
 	void addItem(ActionEvent event) {
-
-		Todo todo = new Todo(itemTitle.getText(), itemDesc.getText(), Date.valueOf(itemDate.getValue()),
-				convertState(itemState.getValue()), controller.getUserId());
-
-		boolean isSuccess = DbConnection.addTodo(todo);
-		if (isSuccess) {
-			JOptionPane.showMessageDialog(null, "Insert Success");
-		} else {
-			JOptionPane.showMessageDialog(null, "Insert Fail");
+		int result = todoItemService.addTodo(
+				new Todo(itemTitle.getText()
+						, itemDesc.getText()
+						, Date.valueOf(itemDate.getValue())
+						, itemState.getValue()
+						, controller.getUserId()));
+		if (result > 0) {
+			JOptionPane.showMessageDialog(null, "등록에 성공 했습니다.");
 		}
 
 		closeDialog(event);
@@ -75,18 +75,6 @@ public class TodoItemController implements Initializable {
 		stage.close();
 	}
 
-	public String convertState(String state) {
-		switch (state) {
-		case "미완료":
-			return "R";
-		case "진행중":
-			return "I";
-		case "완료":
-			return "F";
-		default:
-			return "Occure Error";
-		}
-
-	}
+	
 
 }

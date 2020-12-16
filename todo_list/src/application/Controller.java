@@ -69,26 +69,22 @@ public class Controller implements Initializable {
 		if (null != user) {
 			userId = user.getId();
 			userName = user.getName();
-			JOptionPane.showMessageDialog(null, "Login Success");
+			JOptionPane.showMessageDialog(null, "로그인 성공!");
 			try {
 				goToTodo(event);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Login Fail");
 		}
 	}
 
 	@FXML
 	public void signUp(ActionEvent event) {
-		boolean isSignUpSuccess = DbConnection
-				.addUser(new User(signUpId.getText(), signUpPw.getText(), signUpName.getText()));
-		if (isSignUpSuccess) {
-			JOptionPane.showMessageDialog(null, "SignUp Success");
+		boolean isSuccess = service.addUser(
+				new User(signUpId.getText(), signUpPw.getText(), signUpName.getText()));
+		if (isSuccess) {
+			JOptionPane.showMessageDialog(null, "회원가입 성공!");
 			showLoginPane(event);
-		} else {
-			JOptionPane.showMessageDialog(null, "SignUp Fail");
 		}
 	}
 

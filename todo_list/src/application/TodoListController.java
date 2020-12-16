@@ -17,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -28,58 +27,39 @@ import javafx.stage.StageStyle;
 
 public class TodoListController implements Initializable {
 	@FXML
-    private AnchorPane todoListPane;
-	
-	@FXML
-	private BorderPane todayPane;
+	private AnchorPane todoListPane;
 
 	@FXML
-	private BorderPane upcomingPane;
-
-	@FXML
-	private BorderPane allTodoPane;
+	private BorderPane todayPane, upcomingPane, allTodoPane;
 
 	@FXML
 	private Label userName;
-	
+
 	@FXML
 	private Button logoutBtn;
 
 	@FXML
-	private TableView<Todo> todayTable;
+	private TableView<Todo> todayTable, upcomingTable, allTodoTable;
 
 	@FXML
-	private TableColumn<Todo, String> todayTitle;
+	private TableColumn<Todo, String> todayTitle, todayState;
 
 	@FXML
-	private TableColumn<Todo, String> todayState;
-
-	@FXML
-	private TableView<Todo> upcomingTable;
-
-	@FXML
-	private TableColumn<Todo, String> upcomingTitle;
-
-	@FXML
-	private TableColumn<Todo, String> upcomingState;
-
+	private TableColumn<Todo, String> upcomingTitle, upcomingState;
+	
 	@FXML
 	private TableColumn<Todo, Date> upcomingDate;
 
 	@FXML
-	private TableView<Todo> allTodoTable;
-
-	@FXML
-	private TableColumn<Todo, String> allTodoTitle;
-
-	@FXML
-	private TableColumn<Todo, String> allTodoState;
+	private TableColumn<Todo, String> allTodoTitle, allTodoState;
 
 	@FXML
 	private TableColumn<Todo, Date> allTodoDate;
-
+	
 	private ObservableList<Todo> todoList = null;
 	private Controller controller = new Controller();
+	private TodoListService service = new TodoListService();
+
 	private static Todo updateTodo = null;
 
 	public Todo getUpdateTodo() {
@@ -107,33 +87,14 @@ public class TodoListController implements Initializable {
 	}
 
 	@FXML
-	public void getTodayTodoList() {
-		todayTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
-		todayState.setCellValueFactory(new PropertyValueFactory<Todo, String>("state"));
-
-		todoList = DbConnection.getTodayList(controller.getUserId());
-		todayTable.setItems(todoList);
-	}
-
-	@FXML
 	void showUpcomingPane(ActionEvent event) {
 		todayPane.setVisible(false);
 		upcomingPane.setVisible(true);
 		allTodoPane.setVisible(false);
-
+		
 		getUpcomingTodoList();
 	}
-
-	@FXML
-	public void getUpcomingTodoList() {
-		upcomingTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
-		upcomingState.setCellValueFactory(new PropertyValueFactory<Todo, String>("state"));
-		upcomingDate.setCellValueFactory(new PropertyValueFactory<Todo, Date>("date"));
-
-		todoList = DbConnection.getUpcomingList(controller.getUserId());
-		upcomingTable.setItems(todoList);
-	}
-
+	
 	@FXML
 	void showAllTodoPane(ActionEvent event) {
 		todayPane.setVisible(false);
@@ -142,14 +103,33 @@ public class TodoListController implements Initializable {
 
 		getAllTodoList();
 	}
+	
+	@FXML
+	public void getTodayTodoList() {
+		todayTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
+		todayState.setCellValueFactory(new PropertyValueFactory<Todo, String>("state"));
 
+		todoList = service.getTodoList(new Todo(controller.getUserId()), "today");
+		todayTable.setItems(todoList);
+	}
+
+	@FXML
+	public void getUpcomingTodoList() {
+		upcomingTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
+		upcomingState.setCellValueFactory(new PropertyValueFactory<Todo, String>("state"));
+		upcomingDate.setCellValueFactory(new PropertyValueFactory<Todo, Date>("date"));
+
+		todoList = service.getTodoList(new Todo(controller.getUserId()), "upcoming");
+		upcomingTable.setItems(todoList);
+	}
+	
 	@FXML
 	public void getAllTodoList() {
 		allTodoTitle.setCellValueFactory(new PropertyValueFactory<Todo, String>("title"));
 		allTodoState.setCellValueFactory(new PropertyValueFactory<Todo, String>("state"));
 		allTodoDate.setCellValueFactory(new PropertyValueFactory<Todo, Date>("date"));
 
-		todoList = DbConnection.getAllTodoList(controller.getUserId());
+		todoList = service.getTodoList(new Todo(controller.getUserId()), "allTodo");
 		allTodoTable.setItems(todoList);
 	}
 
@@ -169,8 +149,7 @@ public class TodoListController implements Initializable {
 
 	@FXML
 	void selectTodayRow(MouseEvent event) throws IOException {
-		TableViewSelectionModel<Todo> selectionModel = todayTable.getSelectionModel();
-		updateTodo = selectionModel.getSelectedItem();
+		updateTodo = todayTable.getSelectionModel().getSelectedItem();
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();
@@ -180,8 +159,7 @@ public class TodoListController implements Initializable {
 
 	@FXML
 	void selectUpcomingRow(MouseEvent event) throws IOException {
-		TableViewSelectionModel<Todo> selectionModel = upcomingTable.getSelectionModel();
-		updateTodo = selectionModel.getSelectedItem();
+		updateTodo = upcomingTable.getSelectionModel().getSelectedItem();
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();
@@ -191,8 +169,7 @@ public class TodoListController implements Initializable {
 
 	@FXML
 	void selectAllTodoRow(MouseEvent event) throws IOException {
-		TableViewSelectionModel<Todo> selectionModel = allTodoTable.getSelectionModel();
-		updateTodo = selectionModel.getSelectedItem();
+		updateTodo = allTodoTable.getSelectionModel().getSelectedItem();
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();

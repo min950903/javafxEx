@@ -32,6 +32,10 @@ public class Todo implements Serializable {
 	public Todo(int no) {
 		this.no = no;
 	}
+	
+	public Todo(String userId) {
+		this.userId = userId;
+	}
 
 	public int getNo() {
 		return no;

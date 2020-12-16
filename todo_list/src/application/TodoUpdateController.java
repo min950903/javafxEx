@@ -45,6 +45,8 @@ public class TodoUpdateController implements Initializable {
 
 	private ObservableList<String> comboBoxList = FXCollections.observableArrayList("미완료", "진행중", "완료");
 	private TodoListController controller = new TodoListController();
+	private TodoItemService todoItemService = new TodoItemService();
+	
 	private Todo todo = null;
 
 	@Override
@@ -60,14 +62,15 @@ public class TodoUpdateController implements Initializable {
 
 	@FXML
 	void updateItem(ActionEvent event) {
-		todo = new Todo(todo.getNo(), itemTitle.getText(), itemDesc.getText()
-				,convertState(itemState.getValue()), Date.valueOf(itemDate.getValue()));
+		int result = todoItemService.updateTodo(
+				new Todo(todo.getNo()
+						, itemTitle.getText()
+						, itemDesc.getText()
+						, itemState.getValue()
+						, Date.valueOf(itemDate.getValue())));
 		
-		boolean isSuccess = DbConnection.updateTodo(todo);
-		if (isSuccess) {
-			JOptionPane.showMessageDialog(null, "Update Success");
-		} else {
-			JOptionPane.showMessageDialog(null, "Update Fail");
+		if (result > 0) {
+			JOptionPane.showMessageDialog(null, "업데이트 성공");
 		}
 
 		closeDialog(event);
@@ -75,13 +78,9 @@ public class TodoUpdateController implements Initializable {
 
 	@FXML
 	void deleteItem(ActionEvent event) {
-		todo = new Todo(todo.getNo());
-
-		boolean isSuccess = DbConnection.deleteTodo(todo);
-		if (isSuccess) {
-			JOptionPane.showMessageDialog(null, "Delete Success");
-		} else {
-			JOptionPane.showMessageDialog(null, "Delete Fail");
+		int result = todoItemService.deleteTodo(new Todo(todo.getNo()));
+		if (result > 0) {
+			JOptionPane.showMessageDialog(null, "삭제 성공");
 		}
 
 		closeDialog(event);
@@ -95,19 +94,4 @@ public class TodoUpdateController implements Initializable {
 		stage.close();
 
 	}
-
-	public String convertState(String state) {
-		switch (state) {
-		case "미완료":
-			return "R";
-		case "진행중":
-			return "I";
-		case "완료":
-			return "F";
-		default:
-			return "Occure Error";
-		}
-
-	}
-
 }

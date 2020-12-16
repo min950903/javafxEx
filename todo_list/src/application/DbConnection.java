@@ -27,7 +27,7 @@ public class DbConnection {
 	
 	
 	private static Connection connection = connectDb();
-	private static PreparedStatement preparedStatement= null;
+	private PreparedStatement preparedStatement= null;
 
 	private static void getProperties() throws Exception {
 		File propertyPath = new File("src/application/dbInfo.properties");
@@ -56,7 +56,7 @@ public class DbConnection {
 		}
 	}
 
-	public static ObservableList<User> selectUser(User user) {
+	public ObservableList<User> selectUser(User user) {
 		ObservableList<User> userList = FXCollections.observableArrayList();
 		String sql = "SELECT * FROM USER WHERE ID=? AND PASSWORD=?";
 
@@ -79,53 +79,34 @@ public class DbConnection {
 		}
 	}
 	
-	public static boolean addUser(User user) {
-		boolean isSuccess = false;
-		
+	public int insertUser(User user) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO USER ");
 		sql.append("VALUES (?, ?, ?)");
 
+		int result = 0;
 		try {
 			preparedStatement = connection.prepareStatement(sql.toString());
 			preparedStatement.setString(1, user.getId());
 			preparedStatement.setString(2, user.getPw());
 			preparedStatement.setString(3, user.getName());
 			
-			int result = preparedStatement.executeUpdate();
-			if(result > 0) {
-				return !isSuccess;
-			}
-			
-			return isSuccess;
+			result = preparedStatement.executeUpdate();
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 			
-			return isSuccess;
+			return result;
 		}
 	}
-
-	public static ObservableList<Todo> getTodayList(String id) {
-		String sql = SELECT_SQL + "WHERE DATE(DATE) = CURDATE() AND USER_ID=?";
-		return getTodoList(id, sql);
-	}
 	
-	public static ObservableList<Todo> getUpcomingList(String id) {
-		String sql = SELECT_SQL + "WHERE DATE(DATE) > CURDATE() AND USER_ID=?";
-		return getTodoList(id, sql);
-	}
-	
-	public static ObservableList<Todo> getAllTodoList(String id) {
-		String sql = SELECT_SQL + "WHERE USER_ID=?";
-		return getTodoList(id, sql);
-	}
-	
-	public static ObservableList<Todo> getTodoList(String id, String sql) {
+	public ObservableList<Todo> selectTodoList(Todo todo, String whereSql) {
+		String sql = SELECT_SQL + whereSql;
 		ObservableList<Todo> todoList = FXCollections.observableArrayList();
 		try {
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, id);
+			preparedStatement.setString(1, todo.getUserId());
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
@@ -145,13 +126,12 @@ public class DbConnection {
 		}
 	}
 	
-	public static boolean addTodo(Todo todo ) {
-		boolean isSuccess = false;
-		
+	public int insertTodo(Todo todo ) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("INSERT INTO TODO (TITLE, DESCRIPTION, DATE, STATE, USER_ID) ");
 		sql.append("VALUES (?, ?, ?, ?, ?)");
 
+		int result = 0;
 		try {
 			preparedStatement = connection.prepareStatement(sql.toString());
 			preparedStatement.setString(1, todo.getTitle());
@@ -160,25 +140,22 @@ public class DbConnection {
 			preparedStatement.setString(4, todo.getState());
 			preparedStatement.setString(5, todo.getUserId());
 			
-			int result = preparedStatement.executeUpdate();
-			if(result > 0) {
-				return !isSuccess;
-			}
+			result = preparedStatement.executeUpdate();
+			if(result > 0) {return result;}
 			
-			return isSuccess;
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 			
-			return isSuccess;
+			return result;
 		}
 	}
 	
-	public static boolean updateTodo(Todo todo ) {
-		boolean isSuccess = false;
-		
+	public int updateTodo(Todo todo ) {
 		String sql = "UPDATE TODO SET TITLE=?, DESCRIPTION=?, STATE=?, DATE=? WHERE NO=?";
 
+		int result = 0;
 		try {
 			preparedStatement = connection.prepareStatement(sql.toString());
 			preparedStatement.setString(1, todo.getTitle());
@@ -187,40 +164,35 @@ public class DbConnection {
 			preparedStatement.setDate(4, todo.getDate());
 			preparedStatement.setInt(5, todo.getNo());
 			
-			int result = preparedStatement.executeUpdate();
-			if(result > 0) {
-				return !isSuccess;
-			}
+			result = preparedStatement.executeUpdate();
+			if(result > 0) {return result;}
 			
-			return isSuccess;
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 			
-			return isSuccess;
+			return result;
 		}
 	}
 	
-	public static boolean deleteTodo(Todo todo ) {
-		boolean isSuccess = false;
-		
+	public int deleteTodo(Todo todo ) {
 		String sql = "DELETE FROM TODO WHERE NO=?";
 
+		int result = 0;
 		try {
 			preparedStatement = connection.prepareStatement(sql.toString());
 			preparedStatement.setInt(1, todo.getNo());
 			
-			int result = preparedStatement.executeUpdate();
-			if(result > 0) {
-				return !isSuccess;
-			}
+			result = preparedStatement.executeUpdate();
+			if(result > 0) {return result;}
 			
-			return isSuccess;
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 			
-			return isSuccess;
+			return result;
 		}
 	}
 }
