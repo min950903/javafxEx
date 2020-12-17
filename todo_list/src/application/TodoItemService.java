@@ -1,7 +1,5 @@
 package application;
 
-import javax.swing.JOptionPane;
-
 import application.dto.Todo;
 
 public class TodoItemService {
@@ -9,48 +7,48 @@ public class TodoItemService {
 	
 	public int addTodo(Todo todo) {
 		int result = 0;
-		if(null != todo.getTitle() 
-				&& null != todo.getDesc() 
-				&& null != todo.getState() 
-				&& null != todo.getDate() 
-				&& null != todo.getUserId()) {
+		if(todo.getTitle().equals("") 
+				|| todo.getDesc().equals("") 
+				|| todo.getState().equals("") 
+				|| null == todo.getDate() 
+				|| todo.getUserId().equals("")) {
+			AlertImpl.checkAlert();
+		} else {
 			todo.setState(convertState(todo.getState()));
 			
 			result = dbConnection.insertTodo(todo);
 			if(result > 0) {return result;}
-			JOptionPane.showMessageDialog(null, "등록에 실패 했습니다.");
-		} else {
-			JOptionPane.showMessageDialog(null, "빈 칸을 모두 입력해주세요");
+			AlertImpl.ErrorAlert();
 		}
 		return result;
 	}
 	
 	public int updateTodo(Todo todo) {
 		int result = 0;
-		if(0 < todo.getNo()
-				&& null != todo.getTitle() 
-				&& null != todo.getDesc() 
-				&& null != todo.getState() 
-				&& null != todo.getDate()) {
+		if(todo.getNo() <= 0
+				|| todo.getTitle().equals("") 
+				|| todo.getDesc().equals("") 
+				|| todo.getState().equals("") 
+				|| null == todo.getDate()) {
+			AlertImpl.checkAlert();
+		} else {
 			todo.setState(convertState(todo.getState()));
 			
 			result = dbConnection.updateTodo(todo);
 			if(result > 0) {return result;}
-			JOptionPane.showMessageDialog(null, "업데이트에 실패 했습니다.");
-		} else {
-			JOptionPane.showMessageDialog(null, "빈 칸을 모두 입력해주세요");
+			AlertImpl.ErrorAlert();
 		}
 		return result;
 	}
 	
 	public int deleteTodo(Todo todo) {
 		int result = 0;
-		if(0 < todo.getNo()) {
+		if(todo.getNo() <= 0) {
+			AlertImpl.checkAlert();
+		} else {
 			result = dbConnection.deleteTodo(todo);
 			if(result > 0) {return result;}
-			JOptionPane.showMessageDialog(null, "업데이트에 실패 했습니다.");
-		} else {
-			JOptionPane.showMessageDialog(null, "빈 칸을 모두 입력해주세요");
+			AlertImpl.ErrorAlert();
 		}
 		return result;
 	}
@@ -66,6 +64,5 @@ public class TodoItemService {
 		default:
 			return "Occure Error";
 		}
-
 	}
 }

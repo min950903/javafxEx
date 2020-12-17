@@ -1,7 +1,6 @@
 package application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Properties;
 
@@ -32,32 +31,35 @@ public class Service {
 
 	}
 	
-	public User getUser(User user) {
-		if((user.getId() != null) && (user.getPw() != null)) {
+	public User getUser(User user) throws Exception {
+		if(user.getId().equals("") || user.getPw().equals("")) {
+			AlertImpl.checkAlert();
+		} else {
+			user.setPw(cryptogram.encrypt(user.getPw()));
 			ObservableList<User> userList = dbConnection.selectUser(user);
 			if(userList != null) {return userList.get(0);}
 			
-			JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 확인해주세요");
-		} else {
-			JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호를 입력해주세요");
+			AlertImpl.loginAlert();
 		}
 		
 		return null;
 	}
 	
-	public boolean addUser(User user) {
-		boolean isSuccess = false;
-		if(user.getId() != null 
-				&& user.getPw() != null
-				&& user.getName() != null) {
-			int result = dbConnection.insertUser(user);
-			if(result > 0) {return !isSuccess; }
-			
-			JOptionPane.showMessageDialog(null, "회원가입을 실패했습니다.");
+	public int addUser(User user) throws Exception {
+		int result = 0; 
+		
+		if(user.getId().equals("") 
+				|| user.getPw().equals("")
+				|| user.getName().equals("")) {
+			AlertImpl.checkAlert();
 		} else {
-			JOptionPane.showMessageDialog(null, "빈 칸을 모두 입력해주세요.");
+			user.setPw(cryptogram.encrypt(user.getPw()));
+			result = dbConnection.insertUser(user);
+			if(result > 0) {return result;}
+			
+			AlertImpl.ErrorAlert();
 		}
 		
-		return isSuccess;
+		return result;
 	}
 }

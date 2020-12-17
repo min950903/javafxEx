@@ -4,8 +4,6 @@ import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
 import application.dto.Todo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,25 +60,29 @@ public class TodoUpdateController implements Initializable {
 
 	@FXML
 	void updateItem(ActionEvent event) {
-		int result = todoItemService.updateTodo(
-				new Todo(todo.getNo()
-						, itemTitle.getText()
-						, itemDesc.getText()
-						, itemState.getValue()
-						, Date.valueOf(itemDate.getValue())));
-		
-		if (result > 0) {
-			JOptionPane.showMessageDialog(null, "업데이트 성공");
+		if(null == itemDate.getValue()) {
+			AlertImpl.checkAlert();
+		} else {
+			int result = todoItemService.updateTodo(
+					new Todo(todo.getNo()
+							, itemTitle.getText()
+							, itemDesc.getText()
+							, itemState.getValue()
+							, Date.valueOf(itemDate.getValue())));
+			
+			if (result > 0) {
+				AlertImpl.successAlert();
+				closeDialog(event);
+			}
+			
 		}
-
-		closeDialog(event);
 	}
 
 	@FXML
 	void deleteItem(ActionEvent event) {
 		int result = todoItemService.deleteTodo(new Todo(todo.getNo()));
 		if (result > 0) {
-			JOptionPane.showMessageDialog(null, "삭제 성공");
+			AlertImpl.successAlert();
 		}
 
 		closeDialog(event);

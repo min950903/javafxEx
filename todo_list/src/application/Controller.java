@@ -3,8 +3,6 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
 import application.dto.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,7 +44,7 @@ public class Controller implements Initializable {
 	private static String userName = null;
 	private static StackPane rootStackPane = null;
 	private Service service = new Service();
-	
+
 	public StackPane getStackPane() {
 		return Controller.rootStackPane;
 	}
@@ -54,7 +52,7 @@ public class Controller implements Initializable {
 	public String getUserId() {
 		return Controller.userId;
 	}
-	
+
 	public String getUserName() {
 		return Controller.userName;
 	}
@@ -65,26 +63,28 @@ public class Controller implements Initializable {
 
 	@FXML
 	public void login(ActionEvent event) {
-		User user = service.getUser(new User(loginId.getText(), loginPw.getText()));
-		if (null != user) {
-			userId = user.getId();
-			userName = user.getName();
-			JOptionPane.showMessageDialog(null, "로그인 성공!");
-			try {
+		try {
+			User user = service.getUser(new User(loginId.getText(), loginPw.getText()));
+			if (null != user) {
+				userId = user.getId();
+				userName = user.getName();
+				
 				goToTodo(event);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@FXML
 	public void signUp(ActionEvent event) {
-		boolean isSuccess = service.addUser(
-				new User(signUpId.getText(), signUpPw.getText(), signUpName.getText()));
-		if (isSuccess) {
-			JOptionPane.showMessageDialog(null, "회원가입 성공!");
-			showLoginPane(event);
+		try {
+			int result = service.addUser(new User(signUpId.getText(), signUpPw.getText(), signUpName.getText()));
+			if (result > 0) {
+				showLoginPane(event);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -105,7 +105,7 @@ public class Controller implements Initializable {
 		Parent todoList = FXMLLoader.load(getClass().getResource("layout/todo_list.fxml"));
 		rootStackPane = (StackPane) btnLogin.getScene().getRoot();
 		rootStackPane.getChildren().add(todoList);
-		
+
 		loginId.clear();
 		loginPw.clear();
 	}
