@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-
 import application.dto.User;
 import javafx.collections.ObservableList;
 

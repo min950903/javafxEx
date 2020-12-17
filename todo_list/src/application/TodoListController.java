@@ -59,6 +59,7 @@ public class TodoListController implements Initializable {
 	private ObservableList<Todo> todoList = null;
 	private Controller controller = new Controller();
 	private TodoListService service = new TodoListService();
+	private BorderPane currentPane = todayPane;
 
 	private static Todo updateTodo = null;
 
@@ -79,29 +80,59 @@ public class TodoListController implements Initializable {
 
 	@FXML
 	void showTodayPane(ActionEvent event) {
+		currentPane = todayPane;
+
 		todayPane.setVisible(true);
 		upcomingPane.setVisible(false);
 		allTodoPane.setVisible(false);
 
-		getTodayTodoList();
+		getList();
 	}
 
 	@FXML
 	void showUpcomingPane(ActionEvent event) {
+		currentPane = upcomingPane;
+		
 		todayPane.setVisible(false);
 		upcomingPane.setVisible(true);
 		allTodoPane.setVisible(false);
 		
-		getUpcomingTodoList();
+		getList();
 	}
 	
 	@FXML
 	void showAllTodoPane(ActionEvent event) {
+		currentPane = allTodoPane;
+		
 		todayPane.setVisible(false);
 		upcomingPane.setVisible(false);
 		allTodoPane.setVisible(true);
 
-		getAllTodoList();
+		getList();
+	}
+	
+	@FXML
+	void showTodoItem(ActionEvent event) throws Exception {
+		Stage custom = new Stage(StageStyle.UTILITY);
+		custom.initModality(Modality.WINDOW_MODAL);
+		
+		Parent todoItem = FXMLLoader.load(getClass().getResource("layout/todo_item.fxml"));
+		Scene scene = new Scene(todoItem);
+		custom.setScene(scene);
+		custom.setTitle("Todo Item");
+		custom.showAndWait();
+		
+		getList();
+	}
+	
+	private void getList() {
+		if(currentPane.equals(todayPane)) {
+			getTodayTodoList();
+		} else if(currentPane.equals(upcomingPane)) {
+			getUpcomingTodoList();
+		} else {
+			getAllTodoList();
+		}
 	}
 	
 	@FXML
@@ -131,20 +162,6 @@ public class TodoListController implements Initializable {
 
 		todoList = service.getTodoList(new Todo(controller.getUserId()), "allTodo");
 		allTodoTable.setItems(todoList);
-	}
-
-	@FXML
-	void showTodoItem(ActionEvent event) throws Exception {
-		Stage custom = new Stage(StageStyle.UTILITY);
-		custom.initModality(Modality.WINDOW_MODAL);
-
-		Parent todoItem = FXMLLoader.load(getClass().getResource("layout/todo_item.fxml"));
-		Scene scene = new Scene(todoItem);
-		custom.setScene(scene);
-		custom.setTitle("Todo Item");
-		custom.showAndWait();
-
-		getTodayTodoList();
 	}
 
 	@FXML

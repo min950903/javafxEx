@@ -31,7 +31,10 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="itemTitle" prefHeight="34.0" prefWidth="540.0" />
+            <TextField fx:id="itemTitle" prefHeight="34.0" prefWidth="540.0">
+               <font>
+                  <Font size="24.0" />
+               </font></TextField>
             <Label text="Desc:">
                <font>
                   <Font size="24.0" />
@@ -40,7 +43,10 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextArea fx:id="itemDesc" prefHeight="114.0" prefWidth="540.0" />
+            <TextArea fx:id="itemDesc" prefHeight="63.0" prefWidth="540.0">
+               <font>
+                  <Font size="24.0" />
+               </font></TextArea>
             <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="540.0">
                <children>
                   <Label text="Date: ">
@@ -48,7 +54,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="itemDate" prefHeight="22.0" prefWidth="162.0">
+                  <DatePicker fx:id="itemDate" prefHeight="45.0" prefWidth="195.0" style="-fx-font-size: 24px;">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
@@ -61,7 +67,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="itemState" prefHeight="22.0" prefWidth="136.0" />
+                  <ComboBox fx:id="itemState" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 24px;" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />
@@ -80,6 +86,9 @@
                      </HBox.margin>
                   </Button>
                </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
             </HBox>
          </children>
          <padding>

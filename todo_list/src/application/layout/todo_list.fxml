@@ -100,7 +100,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <center>
-                        <TableView fx:id="todayTable" onMouseClicked="#selectTodayRow" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="todayTable" onMouseClicked="#selectTodayRow" prefHeight="200.0" prefWidth="200.0" style="-fx-font-size: 24;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="todayTitle" prefWidth="739.0" text="Title" />
                             <TableColumn fx:id="todayState" minWidth="0.0" prefWidth="160.0" text="State" />
@@ -120,7 +120,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <center>
-                        <TableView fx:id="upcomingTable" onMouseClicked="#selectUpcomingRow" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="upcomingTable" onMouseClicked="#selectUpcomingRow" prefHeight="200.0" prefWidth="200.0" style="-fx-font-size: 24px;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="upcomingTitle" prefWidth="600.0" text="Title" />
                             <TableColumn fx:id="upcomingState" minWidth="0.0" prefWidth="130.0" text="State" />
@@ -129,7 +129,7 @@
                         </TableView>
                      </center>
                   </BorderPane>
-                  <BorderPane fx:id="allTodoPane" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white;" visible="false">
+                  <BorderPane fx:id="allTodoPane" prefHeight="851.0" prefWidth="921.0" style="-fx-background-color: white; -fx-font-size: 24px;" visible="false">
                      <top>
                         <Label prefWidth="921.0" text="All Todo Task" BorderPane.alignment="CENTER">
                            <font>
