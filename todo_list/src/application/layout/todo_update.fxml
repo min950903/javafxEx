@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="itemPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f5f9fc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TodoUpdateController">
+<BorderPane fx:id="itemPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #f5f9fc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.item.TodoUpdateController">
    <top>
       <Label text="Todo Item" BorderPane.alignment="CENTER">
          <font>
@@ -31,7 +31,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="itemTitle" prefHeight="34.0" prefWidth="540.0" />
+            <TextField fx:id="itemTitle" prefHeight="34.0" prefWidth="540.0" style="-fx-font-size: 24px;" />
             <Label text="Desc:">
                <font>
                   <Font size="24.0" />
@@ -40,7 +40,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextArea fx:id="itemDesc" prefHeight="114.0" prefWidth="540.0" />
+            <TextArea fx:id="itemDesc" prefHeight="61.0" prefWidth="540.0" style="-fx-font-size: 24px;" />
             <HBox alignment="CENTER_LEFT" prefHeight="49.0" prefWidth="540.0">
                <children>
                   <Label text="Date: ">
@@ -48,7 +48,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="itemDate" prefHeight="22.0" prefWidth="162.0">
+                  <DatePicker fx:id="itemDate" prefHeight="45.0" prefWidth="194.0" style="-fx-font-size: 24px;">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
@@ -61,7 +61,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="itemState" prefHeight="22.0" prefWidth="136.0" />
+                  <ComboBox fx:id="itemState" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 24px;" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />
@@ -80,6 +80,9 @@
                      </HBox.margin>
                   </Button>
                </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
             </HBox>
             <VBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="540.0">
                <children>

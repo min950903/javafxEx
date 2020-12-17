@@ -1,5 +1,6 @@
-package application;
+package application.list;
 
+import application.common.DbConnection;
 import application.dto.Todo;
 import javafx.collections.ObservableList;
 
@@ -10,7 +11,7 @@ public class TodoListService {
 		String whereSql = converSql(tableName);
 		ObservableList<Todo> list =  dbconnetcion.selectTodoList(todo, whereSql);
 		
-		if(null != list) {return list;}
+		if(list.size() > 0) {return list;}
 		
 		return null;
 	}
@@ -18,11 +19,11 @@ public class TodoListService {
 	private String converSql(String tableName) {
 		switch(tableName) {
 		case "today": 
-			return "WHERE DATE(DATE) = CURDATE() AND USER_ID=?";
+			return "WHERE DATE(DATE) = CURDATE() AND USER_ID=? ORDER BY DATE";
 		case "upcoming" :
-			return "WHERE DATE(DATE) > CURDATE() AND USER_ID=?";
+			return "WHERE DATE(DATE) > CURDATE() AND USER_ID=? ORDER BY DATE";
 		default :
-			return "WHERE USER_ID=?";
+			return "WHERE USER_ID=? ORDER BY DATE";
 		}
 	}
 	

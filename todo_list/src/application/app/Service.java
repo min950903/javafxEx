@@ -1,9 +1,12 @@
-package application;
+package application.app;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
+import application.common.AlertImpl;
+import application.common.CryptogramImpl;
+import application.common.DbConnection;
 import application.dto.User;
 import javafx.collections.ObservableList;
 
@@ -35,7 +38,7 @@ public class Service {
 		} else {
 			user.setPw(cryptogram.encrypt(user.getPw()));
 			ObservableList<User> userList = dbConnection.selectUser(user);
-			if(userList != null) {return userList.get(0);}
+			if(userList.size() > 0) {return userList.get(0);}
 			
 			AlertImpl.loginAlert();
 		}

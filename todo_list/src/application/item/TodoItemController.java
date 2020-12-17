@@ -1,9 +1,11 @@
-package application;
+package application.item;
 
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
+import application.app.Controller;
+import application.common.AlertImpl;
 import application.dto.Todo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,4 +1,4 @@
-package application;
+package application.common;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Key;

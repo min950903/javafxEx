@@ -1,10 +1,11 @@
-package application;
+package application.list;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import application.app.Controller;
 import application.dto.Todo;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,7 +60,7 @@ public class TodoListController implements Initializable {
 	private ObservableList<Todo> todoList = null;
 	private Controller controller = new Controller();
 	private TodoListService service = new TodoListService();
-	private BorderPane currentPane = todayPane;
+	private BorderPane currentPane = null;
 
 	private static Todo updateTodo = null;
 
@@ -75,7 +76,7 @@ public class TodoListController implements Initializable {
 
 	@FXML
 	void onLogout(ActionEvent event) {
-		controller.getStackPane().getChildren().remove(1);
+		controller.getStackPane().getChildren().remove(2);
 	}
 
 	@FXML
@@ -113,10 +114,13 @@ public class TodoListController implements Initializable {
 	
 	@FXML
 	void showTodoItem(ActionEvent event) throws Exception {
+		if(null == currentPane) {
+			currentPane = todayPane;
+		}
 		Stage custom = new Stage(StageStyle.UTILITY);
 		custom.initModality(Modality.WINDOW_MODAL);
 		
-		Parent todoItem = FXMLLoader.load(getClass().getResource("layout/todo_item.fxml"));
+		Parent todoItem = FXMLLoader.load(getClass().getResource("../layout/todo_item.fxml"));
 		Scene scene = new Scene(todoItem);
 		custom.setScene(scene);
 		custom.setTitle("Todo Item");
@@ -167,6 +171,7 @@ public class TodoListController implements Initializable {
 	@FXML
 	void selectTodayRow(MouseEvent event) throws IOException {
 		updateTodo = todayTable.getSelectionModel().getSelectedItem();
+		if(null == updateTodo ) {return;}
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();
@@ -177,6 +182,7 @@ public class TodoListController implements Initializable {
 	@FXML
 	void selectUpcomingRow(MouseEvent event) throws IOException {
 		updateTodo = upcomingTable.getSelectionModel().getSelectedItem();
+		if(null == updateTodo ) {return;}
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();
@@ -187,10 +193,11 @@ public class TodoListController implements Initializable {
 	@FXML
 	void selectAllTodoRow(MouseEvent event) throws IOException {
 		updateTodo = allTodoTable.getSelectionModel().getSelectedItem();
+		if(null == updateTodo ) {return;}
 
 		Stage updateDialog = getDialog(updateTodo);
 		updateDialog.showAndWait();
-
+		
 		getAllTodoList();
 	}
 
@@ -198,7 +205,7 @@ public class TodoListController implements Initializable {
 		Stage updateDialog = new Stage(StageStyle.UTILITY);
 		updateDialog.initModality(Modality.WINDOW_MODAL);
 
-		Parent todoItem = FXMLLoader.load(getClass().getResource("layout/todo_update.fxml"));
+		Parent todoItem = FXMLLoader.load(getClass().getResource("../layout/todo_update.fxml"));
 		Scene scene = new Scene(todoItem);
 		updateDialog.setScene(scene);
 		updateDialog.setTitle("Todo Update");

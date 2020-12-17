@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="851.0" prefWidth="1271.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TodoListController">
+<AnchorPane prefHeight="851.0" prefWidth="1271.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.list.TodoListController">
    <children>
       <HBox prefHeight="851.0" prefWidth="1271.0">
          <children>
@@ -26,6 +26,9 @@
                               <Label fx:id="userName" prefHeight="22.0" prefWidth="243.0" />
                               <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#onLogout" prefHeight="25.0" prefWidth="60.0" style="-fx-background-color: #47bbc1;" text="Logout" textFill="WHITE" />
                            </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="350.0">
                            <children>
@@ -43,6 +46,9 @@
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="35.0" />
+                           </padding>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="350.0">
                            <children>
@@ -103,7 +109,7 @@
                         <TableView fx:id="todayTable" onMouseClicked="#selectTodayRow" prefHeight="200.0" prefWidth="200.0" style="-fx-font-size: 24;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="todayTitle" prefWidth="739.0" text="Title" />
-                            <TableColumn fx:id="todayState" minWidth="0.0" prefWidth="160.0" text="State" />
+                            <TableColumn fx:id="todayState" minWidth="0.0" prefWidth="160.0" style="-fx-alignment: center;" text="State" />
                           </columns>
                         </TableView>
                      </center>
@@ -123,8 +129,8 @@
                         <TableView fx:id="upcomingTable" onMouseClicked="#selectUpcomingRow" prefHeight="200.0" prefWidth="200.0" style="-fx-font-size: 24px;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="upcomingTitle" prefWidth="600.0" text="Title" />
-                            <TableColumn fx:id="upcomingState" minWidth="0.0" prefWidth="130.0" text="State" />
-                              <TableColumn fx:id="upcomingDate" prefWidth="170.0" text="Date" />
+                            <TableColumn fx:id="upcomingState" minWidth="0.0" prefWidth="130.0" style="-fx-alignment: center;" text="State" />
+                              <TableColumn fx:id="upcomingDate" prefWidth="170.0" style="-fx-alignment: center;" text="Date" />
                           </columns>
                         </TableView>
                      </center>
@@ -144,8 +150,8 @@
                         <TableView fx:id="allTodoTable" onMouseClicked="#selectAllTodoRow" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="allTodoTitle" prefWidth="600.0" text="Title" />
-                              <TableColumn fx:id="allTodoState" prefWidth="130.0" text="State" />
-                            <TableColumn fx:id="allTodoDate" prefWidth="170.0" text="Date" />
+                              <TableColumn fx:id="allTodoState" prefWidth="130.0" style="-fx-alignment: center;" text="State" />
+                            <TableColumn fx:id="allTodoDate" prefWidth="170.0" style="-fx-alignment: center;" text="Date" />
                           </columns>
                         </TableView>
                      </center>

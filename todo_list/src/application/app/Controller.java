@@ -1,4 +1,4 @@
-package application;
+package application.app;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -102,7 +102,7 @@ public class Controller implements Initializable {
 
 	@FXML
 	void goToTodo(ActionEvent event) throws Exception {
-		Parent todoList = FXMLLoader.load(getClass().getResource("layout/todo_list.fxml"));
+		Parent todoList = FXMLLoader.load(getClass().getResource("../layout/todo_list.fxml"));
 		rootStackPane = (StackPane) btnLogin.getScene().getRoot();
 		rootStackPane.getChildren().add(todoList);
 
