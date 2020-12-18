@@ -35,11 +35,15 @@ public class Service {
 	public User getUser(User user) throws Exception {
 		if(user.getId().equals("") || user.getPw().equals("")) {
 			AlertImpl.checkAlert();
+			return null;
+		}
+		
+		user.setPw(cryptogram.encrypt(user.getPw()));
+		ObservableList<User> userList = dbConnection.selectUser(user);
+		if(null == userList) {
+			AlertImpl.ErrorAlert();
 		} else {
-			user.setPw(cryptogram.encrypt(user.getPw()));
-			ObservableList<User> userList = dbConnection.selectUser(user);
 			if(userList.size() > 0) {return userList.get(0);}
-			
 			AlertImpl.loginAlert();
 		}
 		
@@ -53,14 +57,14 @@ public class Service {
 				|| user.getPw().equals("")
 				|| user.getName().equals("")) {
 			AlertImpl.checkAlert();
-		} else {
-			user.setPw(cryptogram.encrypt(user.getPw()));
-			result = dbConnection.insertUser(user);
-			if(result > 0) {return result;}
-			
-			AlertImpl.ErrorAlert();
-		}
+			return result;
+		} 
 		
+		user.setPw(cryptogram.encrypt(user.getPw()));
+		result = dbConnection.insertUser(user);
+		if(result > 0) {return result;}
+		
+		AlertImpl.ErrorAlert();
 		return result;
 	}
 }

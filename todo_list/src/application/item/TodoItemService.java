@@ -9,49 +9,56 @@ public class TodoItemService {
 	
 	public int addTodo(Todo todo) {
 		int result = 0;
+		
 		if(todo.getTitle().equals("") 
 				|| todo.getDesc().equals("") 
 				|| todo.getState().equals("") 
 				|| null == todo.getDate() 
 				|| todo.getUserId().equals("")) {
 			AlertImpl.checkAlert();
-		} else {
-			todo.setState(convertState(todo.getState()));
-			
-			result = dbConnection.insertTodo(todo);
-			if(result > 0) {return result;}
-			AlertImpl.ErrorAlert();
-		}
+			return result;
+		} 
+		
+		todo.setState(convertState(todo.getState()));
+		result = dbConnection.insertTodo(todo);
+		if(result > 0) {return result;}
+		
+		AlertImpl.ErrorAlert();
 		return result;
 	}
 	
 	public int updateTodo(Todo todo) {
 		int result = 0;
+		
 		if(todo.getNo() <= 0
 				|| todo.getTitle().equals("") 
 				|| todo.getDesc().equals("") 
 				|| todo.getState().equals("") 
 				|| null == todo.getDate()) {
 			AlertImpl.checkAlert();
-		} else {
-			todo.setState(convertState(todo.getState()));
-			
-			result = dbConnection.updateTodo(todo);
-			if(result > 0) {return result;}
-			AlertImpl.ErrorAlert();
+			return result;
 		}
+		
+		todo.setState(convertState(todo.getState()));
+		result = dbConnection.updateTodo(todo);
+		if(result > 0) {return result;}
+		
+		AlertImpl.ErrorAlert();
 		return result;
 	}
 	
 	public int deleteTodo(Todo todo) {
 		int result = 0;
+		
 		if(todo.getNo() <= 0) {
 			AlertImpl.checkAlert();
-		} else {
-			result = dbConnection.deleteTodo(todo);
-			if(result > 0) {return result;}
-			AlertImpl.ErrorAlert();
+			return result;
 		}
+		
+		result = dbConnection.deleteTodo(todo);
+		if(result > 0) {return result;}
+
+		AlertImpl.ErrorAlert();
 		return result;
 	}
 	

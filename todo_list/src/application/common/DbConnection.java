@@ -8,8 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-
 import application.dto.Todo;
 import application.dto.User;
 import javafx.collections.FXCollections;
@@ -22,7 +20,7 @@ public class DbConnection {
 	private static String DATABASE_PASSWORD = null;
 	private static String SELECT_SQL = 
 			"SELECT NO, TITLE, DESCRIPTION"
-			+ ",CASE STATE WHEN 'R' THEN '미완료' WHEN 'I' THEN '실행중' WHEN 'F' THEN '완료' END AS STATE"
+			+ ",CASE STATE WHEN 'R' THEN '미완료' WHEN 'I' THEN '진행중' WHEN 'F' THEN '완료' END AS STATE"
 			+ ",DATE FROM TODO ";
 	
 	
@@ -67,13 +65,13 @@ public class DbConnection {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
-				userList.add(new User(resultSet.getString("ID"), resultSet.getString("PASSWORD"), resultSet.getString("NAME")));
+				userList.add(new User(resultSet.getString("ID")
+						, resultSet.getString("PASSWORD"), resultSet.getString("NAME")));
 			}
 
 			return userList;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 
 			return null;
 		}
@@ -95,7 +93,6 @@ public class DbConnection {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 			
 			return result;
 		}
@@ -120,7 +117,6 @@ public class DbConnection {
 			return todoList;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 
 			return null;
 		}
@@ -146,7 +142,6 @@ public class DbConnection {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 			
 			return result;
 		}
@@ -170,7 +165,6 @@ public class DbConnection {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 			
 			return result;
 		}
@@ -190,7 +184,6 @@ public class DbConnection {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e);
 			
 			return result;
 		}

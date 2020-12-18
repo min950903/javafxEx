@@ -1,5 +1,6 @@
 package application.list;
 
+import application.common.AlertImpl;
 import application.common.DbConnection;
 import application.dto.Todo;
 import javafx.collections.ObservableList;
@@ -11,7 +12,11 @@ public class TodoListService {
 		String whereSql = converSql(tableName);
 		ObservableList<Todo> list =  dbconnetcion.selectTodoList(todo, whereSql);
 		
-		if(list.size() > 0) {return list;}
+		if(null == list) {
+			AlertImpl.ErrorAlert();
+		} else {
+			if(list.size() > 0) {return list;}
+		}
 		
 		return null;
 	}
